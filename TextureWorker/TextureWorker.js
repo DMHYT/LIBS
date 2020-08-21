@@ -26,13 +26,21 @@ const TextureWorker = {
             height: number,
             config: bitmap config
         } or TextureWorker.TEXTURE_STANDART,
+        src: {
+            paint: {
+                color: [int r, int g, int b],
+                mode: your PorterDuffMode or TextureWorker.MODE_STANDART
+            },
+            path: path to source texture folder from the mod directory, for ex. "assets/items-opaque/",
+            name: source texture name without .png
+        },
         overlays: [
             {
                 paint: {
                     color: [int r, int g, int b],
                     mode: your PorterDuffMode or TextureWorker.MODE_STANDART
                 },
-                path: path to texture folder from the root mod directory, for ex. "assets/items-opaque/",
+                path: path to texture folder from the mod directory, for ex. "assets/items-opaque/",
                 name: texture name without .png
             },
             ...
@@ -46,14 +54,18 @@ const TextureWorker = {
     createTextureWithOverlays: function(args){
         const bmp = new Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, args.bitmap.config);
         const cvs = new Canvas(bmp);
+        if(src.paint){
+            const spt = new Paint();
+            spt.setColorFilter(new ColorFilter(Color.rgb(args.src.paint.color[0], args.src.paint.color[1], args.src.paint.color[2]), args.src.paint.mode));
+            cvs.drawBitmap(FileTools.ReadImage(__dir__+args.src.path+args.src.name+".png"), 0, 0, spt);
+        } else cvs.drawBitmap(FileTools.ReadImage(__dir__+args.src.path+args.src.name+".png"), 0, 0, null);
         for(let i in args.overlays){
             let over = args.overlays[i];
-            let tex = FileTools.ReadImage(__dir__+over.path+over.name+".png");
             if(over.paint){
                 const pt = new Paint();
                 pt.setColorFilter(new ColorFilter(Color.rgb(over.paint.color[0], over.paint.color[1], over.paint.color[2]), over.paint.mode));
-                cvs.drawBitmap(tex, 0, 0, pt || null);
-            }
+                cvs.drawBitmap(FileTools.ReadImage(__dir__+over.path+over.name+".png"), 0, 0, pt);
+            } else cvs.drawBitmap(FileTools.ReadImage(__dir__+over.path+over.name+".png"), 0, 0, null);
         }
         FileTools.WriteImage(__dir__+args.result.path+args.result.name+".png", bmp);
     },
