@@ -127,7 +127,9 @@ Creates new texture with changed color.
 }
 ```
 ***
-#### **INFO**
-This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK Public
-####[My VK Public](https://www.vk.com/dmhmods)
+### **INFO**
+#### This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK.
+#### [My VK Public](https://www.vk.com/dmhmods)
+#### [My VK](https://www.vk.com/vstannumdum)
+***
 ###### © vstannumdum 2020
