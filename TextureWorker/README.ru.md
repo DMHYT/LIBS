@@ -17,6 +17,14 @@ TextureWorker.createTextureWithOverlays({
     height: 16,
     config: Bitmap.Config.ARGB_8888
   },
+  src: {
+    paint: {
+      color: [255, 0, 255],
+      mode: PorterDuff.Mode.SRC_IN
+    },
+    path: "assets/items-opaque/",
+    name: "mySourceTexture_0"
+  },
   overlays: [
     {
       paint: {
@@ -45,6 +53,20 @@ TextureWorker.createTextureWithOverlays({
     height: 16,
     //android.graphics.Bitmap.Config для текстуры или TextureWorker.TEXTURE_STANDART (это тип конфига ARGB_8888)
     config: Bitmap.Config.ARGB_8888
+  },
+  //исходная текстура
+  src: {
+    //перекрашивание исходной текстуры в другой цвет (необязательно)
+    paint: {
+      //цвет, на который меняется текстура [r, g, b]
+      color: [255, 0, 255],
+      //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
+      mode: PorterDuff.Mode.SRC_IN
+    },
+    //путь к папке исходной текстуры в директории мода
+    path: "assets/items-opaque/",
+    //имя исходной текстуры без .png
+    name: "mySourceTexture_0"
   },
   overlays: [
     {
@@ -128,7 +150,7 @@ TextureWorker.paintTexture({
 ```
 ***
 ### **ИНФОРМАЦИЯ**
-#### Это первая версия этой библиотеки, имеющая всего 2 метода. Вы можете предложить свои полезные методы для текстур в ВК.
+#### Это первая версия этой библиотеки, имеющая всего 2 метода. Вы можете предложить свои полезные методы для текстур в ВК, а также предлагать свои идеи по поводу улучшения удобства и кастомизации библиотеки.
 #### [Моя группа ВК](https://www.vk.com/dmhmods)
 #### [Мой ВК](https://www.vk.com/vstannumdum)
 ***
