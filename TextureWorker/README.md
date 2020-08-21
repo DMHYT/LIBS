@@ -35,7 +35,7 @@ Textures.createTextureWithOverlays({
 });
 ```
 Creates new texture at following path with overlays.
-##### **Arguments object**
+##### **Params object**
 ```js
 {
   bitmap: {
@@ -95,7 +95,7 @@ Textures.paintTexture({
 });
 ```
 Creates new texture with changed color.
-##### **Arguments object**
+##### **Params object**
 ```js
 {
   bitmap: {
