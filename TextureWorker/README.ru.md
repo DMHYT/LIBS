@@ -1,7 +1,7 @@
 ## **TextureWorker**
 TextureWorker - библиотека для работы с битмапами / текстурами
 ***
-### **Использование метода Textures**
+### **Использование метода TextureWorker**
 #### **Инициализация**
 Для того, чтобы начать работу, необходимо импортировать библиотеку.
 ```js
@@ -11,7 +11,7 @@ IMPORT("TextureWorker");
 
 #### **Наложение слоя на текстуру**
 ```js
-Textures.createTextureWithOverlays({
+TextureWorker.createTextureWithOverlays({
   bitmap: {
     width: 16,
     height: 16,
@@ -43,7 +43,7 @@ Textures.createTextureWithOverlays({
     width: 16,
     //высота текстуры в пикселях
     height: 16,
-    //android.graphics.Bitmap.Config для текстуры или Textures.TEXTURE_STANDART (это тип конфига ARGB_8888)
+    //android.graphics.Bitmap.Config для текстуры или TextureWorker.TEXTURE_STANDART (это тип конфига ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
   overlays: [
@@ -52,7 +52,7 @@ Textures.createTextureWithOverlays({
       paint: {
         //цвет, на который меняется текстура [r, g, b]
         color: [255, 0, 255], 
-        //android.graphics.PorterDuff.Mode или Textures.MODE_STANDART (это SRC_IN)
+        //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
         mode: PorterDuff.Mode.SRC_IN 
       },
       //путь к папке текстуры в директории мода
@@ -74,7 +74,7 @@ Textures.createTextureWithOverlays({
 
 #### **Перекраска текстуры**
 ```js
-Textures.paintTexture({
+TextureWorker.paintTexture({
   bitmap: {
     width: 16,
     height: 16,
@@ -103,7 +103,7 @@ Textures.paintTexture({
     width: 16,
     //высота текстуры в пикселях
     height: 16,
-    //android.graphics.Bitmap.Config ля текстуры или Textures.TEXTURE_STANDART (это тип конфига ARGB_8888)
+    //android.graphics.Bitmap.Config ля текстуры или TextureWorker.TEXTURE_STANDART (это тип конфига ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
   src: {
@@ -115,7 +115,7 @@ Textures.paintTexture({
   paint: {
     //цвет, в который перекрасить текстуру [r, g, b]
     color: [255, 0, 255],
-    //android.graphics.PorterDuff.Mode или Textures.MODE_STANDART (это SRC_IN)
+    //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
     mode: PorterDuff.Mode.SRC_IN
   },
   result: {
