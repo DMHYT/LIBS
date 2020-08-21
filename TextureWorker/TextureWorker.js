@@ -16,7 +16,7 @@ const Paint = android.graphics.Paint;
 const ColorFilter = android.graphics.PorterDuffColorFilter;
 const PorterDuff = android.graphics.PorterDuff;
 
-const Textures = {
+const TextureWorker = {
     TEXTURE_STANDART: {width: 16, height: 16, config: Bitmap.Config.ARGB_8888},
     MODE_STANDART: PorterDuff.Mode.SRC_IN,
     /*
@@ -25,12 +25,12 @@ const Textures = {
             width: number,
             height: number,
             config: bitmap config
-        } or Textures.TEXTURE_STANDART,
+        } or TextureWorker.TEXTURE_STANDART,
         overlays: [
             {
                 paint: {
                     color: [int r, int g, int b],
-                    mode: your PorterDuffMode or Textures.MODE_STANDART
+                    mode: your PorterDuffMode or TextureWorker.MODE_STANDART
                 },
                 path: path to texture folder from the root mod directory, for ex. "assets/items-opaque/",
                 name: texture name without .png
@@ -63,14 +63,14 @@ const Textures = {
             width: number,
             height: number,
             config: bitmap config
-        } or Textures.TEXTURE_STANDART,
+        } or TextureWorker.TEXTURE_STANDART,
         src: {
             path: path to source texture from the mod directory, for ex. "assets/items-opaque",
             name: name of the source texture without .png
         },
         paint: {
             color: [int r, int g, int b],
-            mode: your PorterDuffMode or Texture.MODE_STANDART
+            mode: your PorterDuffMode or TextureWorker.MODE_STANDART
         }
         result: {
             path: path to new texture location, for ex. "assets/items-opaque",
@@ -95,4 +95,4 @@ EXPORT("Canvas", Canvas);
 EXPORT("Paint", Paint);
 EXPORT("ColorFilter", ColorFilter);
 EXPORT("PorterDuff", PorterDuff);
-EXPORT("Textures", Textures);
+EXPORT("TextureWorker", TextureWorker);
