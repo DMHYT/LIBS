@@ -17,6 +17,14 @@ TextureWorker.createTextureWithOverlays({
     height: 16,
     config: Bitmap.Config.ARGB_8888
   },
+  src: {
+    paint: {
+      color: [255, 0, 255],
+      mode: PorterDuff.Mode.SRC_IN
+    },
+      path: "assets/items-opaque/",
+      name: "mySourceTexture_0"
+  },
   overlays: [
     {
       paint: {
@@ -45,6 +53,20 @@ Creates new texture at following path with overlays.
     height: 16,
     //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
     config: Bitmap.Config.ARGB_8888
+  },
+  //source texture
+  src: {
+    //painting the source texture in another color (optional)
+    paint: {
+      //color to change texture [r, g, b]
+      color: [255, 0, 255],
+      //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
+      mode: PorterDuff.Mode.SRC_IN
+    },
+    //path to source texture folder from the mod directory
+    path: "assets/items-opaque/",
+    //texture name without .png
+    name: "mySourceTexture_0"
   },
   overlays: [
     {
@@ -128,7 +150,7 @@ Creates new texture with changed color.
 ```
 ***
 ### **INFO**
-#### This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK.
+#### This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
 #### [My VK Public](https://www.vk.com/dmhmods)
 #### [My VK](https://www.vk.com/vstannumdum)
 ***
