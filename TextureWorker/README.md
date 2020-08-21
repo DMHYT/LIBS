@@ -1,7 +1,7 @@
 ## **TextureWorker**
 TextureWorker is a library to work with bitmaps / textures
 ***
-### **Using Textures method**
+### **Using TextureWorker method**
 #### **Initialization**
 To start working you must import the library.
 ```js
@@ -11,7 +11,7 @@ IMPORT("TextureWorker");
 
 #### **Texture overlays**
 ```js
-Textures.createTextureWithOverlays({
+TextureWorker.createTextureWithOverlays({
   bitmap: {
     width: 16,
     height: 16,
@@ -43,7 +43,7 @@ Creates new texture at following path with overlays.
     width: 16,
     //texture height in pixels
     height: 16,
-    //android.graphics.Bitmap.Config for the texture or Textures.TEXTURE_STANDART (it's config ARGB_8888)
+    //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
   overlays: [
@@ -52,7 +52,7 @@ Creates new texture at following path with overlays.
       paint: {
         //color to change texture [r, g, b]
         color: [255, 0, 255], 
-        //android.graphics.PorterDuff.Mode or Textures.MODE_STANDART (it is SRC_IN)
+        //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
         mode: PorterDuff.Mode.SRC_IN 
       },
       //path to texture's folder from the mod directory
@@ -74,7 +74,7 @@ Creates new texture at following path with overlays.
 
 #### **Painting the texture**
 ```js
-Textures.paintTexture({
+TextureWorker.paintTexture({
   bitmap: {
     width: 16,
     height: 16,
@@ -103,7 +103,7 @@ Creates new texture with changed color.
     width: 16,
     //texture height in pixels
     height: 16,
-    //android.graphics.Bitmap.Config for the texture or Textures.TEXTURE_STANDART (it's config ARGB_8888)
+    //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
   src: {
@@ -115,7 +115,7 @@ Creates new texture with changed color.
   paint: {
     //color to change texture [r, g, b]
     color: [255, 0, 255],
-    //android.graphics.PorterDuff.Mode or Textures.MODE_STANDART (it is SRC_IN)
+    //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
     mode: PorterDuff.Mode.SRC_IN
   },
   result: {
