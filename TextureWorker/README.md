@@ -149,6 +149,12 @@ Creates new texture with changed color.
 }
 ```
 ***
+### **Downloading the documentation (for Visual Studio Code hints)**
+#### - Go to your mod project folder
+#### - Move TextureWorker.d.ts to toolchain/jslibs/
+#### - Do any task that builds the mod, to update documentation
+'''
+***
 ### **INFO**
 #### This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
 #### [My VK Public](https://www.vk.com/dmhmods)
