@@ -9,12 +9,12 @@ LIBRARY({
 //VK - https://www.vk.com/vstannumdum
 //VK Public - https://www.vk.com/dmhmods
 
-const Color = android.graphics.Color;
-const Bitmap = android.graphics.Bitmap;
-const Canvas = android.graphics.Color;
-const Paint = android.graphics.Paint;
-const ColorFilter = android.graphics.PorterDuffColorFilter;
-const PorterDuff = android.graphics.PorterDuff;
+var Color = android.graphics.Color;
+var Bitmap = android.graphics.Bitmap;
+var Canvas = android.graphics.Color;
+var Paint = android.graphics.Paint;
+var ColorFilter = android.graphics.PorterDuffColorFilter;
+var PorterDuff = android.graphics.PorterDuff;
 
 /**
  * @typedef {Object} OVERLAY - texture overlay object
@@ -38,7 +38,7 @@ const PorterDuff = android.graphics.PorterDuff;
   * @property {*} [config] - android.graphics.Bitmap.Config, default is ARGB_8888
   */
 
-const TextureWorker = {
+var TextureWorker = {
     TEXTURE_STANDART: {width: 16, height: 16, config: Bitmap.Config.ARGB_8888},
     MODE_STANDART: PorterDuff.Mode.SRC_IN,
     /**
