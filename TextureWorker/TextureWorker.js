@@ -57,7 +57,7 @@ var TextureWorker = {
             let tex = FileTools.ReadImage(__dir__+over.path+over.name+".png");
             if(over.paint){
                 const pt = new Paint();
-                pt.setColorFilter(new ColorFilter(over.paint.color, over.paint.mode));
+                pt.setColorFilter(new ColorFilter(Color.rgb(args.paint.color[0], args.paint.color[1], args.paint.color[2]), over.paint.mode || PorterDuff.Mode.SRC_IN));
                 cvs.drawBitmap(tex, 0, 0, pt || null);
             }
         }
@@ -78,7 +78,7 @@ var TextureWorker = {
         const cvs = new Canvas(bmp);
         const pt = new Paint();
         let tex = FileTools.ReadImage(__dir__+args.src.path+args.src.name+".png");
-        pt.setColorFilter(new ColorFilter(args.paint.color, args.paint.mode));
+        pt.setColorFilter(new ColorFilter(Color.rgb(args.paint.color[0], args.paint.color[1], args.paint.color[2]), args.paint.mode || PorterDuff.Mode.SRC_IN));
         cvs.drawBitmap(tex, 0, 0, pt);
         FileTools.WriteImage(__dir__+args.result.path+args.result.name+".png", bmp);
     }
