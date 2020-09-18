@@ -11,7 +11,7 @@ LIBRARY({
 
 var Color = android.graphics.Color;
 var Bitmap = android.graphics.Bitmap;
-var Canvas = android.graphics.Color;
+var Canvas = android.graphics.Canvas;
 var Paint = android.graphics.Paint;
 var ColorFilter = android.graphics.PorterDuffColorFilter;
 var PorterDuff = android.graphics.PorterDuff;
