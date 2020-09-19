@@ -58,8 +58,8 @@ var TextureWorker = {
             if(over.paint){
                 const pt = new Paint();
                 pt.setColorFilter(new ColorFilter(Color.rgb(args.paint.color[0], args.paint.color[1], args.paint.color[2]), over.paint.mode || PorterDuff.Mode.SRC_IN));
-                cvs.drawBitmap(tex, 0, 0, pt || null);
-            }
+                cvs.drawBitmap(tex, 0, 0, pt);
+            } else cvs.drawBitmap(tex, 0, 0, null);
         }
         FileTools.WriteImage(__dir__+args.result.path+args.result.name+".png", bmp);
     },
