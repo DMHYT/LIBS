@@ -57,7 +57,7 @@ var TextureWorker = {
             let tex = FileTools.ReadImage(__dir__+over.path+over.name+".png");
             if(over.paint){
                 const pt = new Paint();
-                pt.setColorFilter(new ColorFilter(Color.rgb(args.paint.color[0], args.paint.color[1], args.paint.color[2]), over.paint.mode || PorterDuff.Mode.SRC_IN));
+                pt.setColorFilter(new ColorFilter(Color.rgb(over.paint.color[0], over.paint.color[1], over.paint.color[2]), over.paint.mode || PorterDuff.Mode.SRC_IN));
                 cvs.drawBitmap(tex, 0, 0, pt);
             } else cvs.drawBitmap(tex, 0, 0, null);
         }
