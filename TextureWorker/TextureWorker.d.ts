@@ -28,19 +28,10 @@ interface TEXTURE {
 
 interface OVERLAY {
     /**
-     * settings to paint the overlay in another color
+     * RGB color to paint the overlay
+     * @example [255, 0, 255]
      */
-    paint?: {
-        /**
-         * RGB color to paint the overlay
-         * @example [255, 0, 255]
-         */
-        color: [r: number, g: number, b: number],
-        /**
-         * android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it's SRC_IN)
-         */
-        mode: any
-    },
+    color?: [r: number, g: number, b: number]
     /**
      * path to the texture from mod directory
      * @example "assets/items-opaque/"
@@ -86,17 +77,11 @@ declare namespace TextureWorker {
          * source texture
          */
         src: TEXTURE,
-        paint: {
-            /**
-             * RGB color to paint the overlay
-             * @example [255, 0, 255]
-             */
-            color: [r: number, g: number, b: number],
-            /**
-             * android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it's SRC_IN)
-             */
-            mode: any
-        },
+        /**
+         * RGB color to paint the overlay
+         * @example [255, 0, 255]
+         */
+        color: [r: number, g: number, b: number],            
         /**
          * result texture
          */

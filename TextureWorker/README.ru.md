@@ -17,20 +17,9 @@ TextureWorker.createTextureWithOverlays({
     height: 16,
     config: Bitmap.Config.ARGB_8888
   },
-  src: {
-    paint: {
-      color: [255, 0, 255],
-      mode: PorterDuff.Mode.SRC_IN
-    },
-    path: "assets/items-opaque/",
-    name: "mySourceTexture_0"
-  },
   overlays: [
     {
-      paint: {
-        color: [255, 0, 255],
-        mode: PorterDuff.Mode.SRC_IN
-      },
+      color: [255, 0, 255],
       path: "assets/items-opaque/",
       name: "myTexture_0"
     },
@@ -54,29 +43,11 @@ TextureWorker.createTextureWithOverlays({
     //android.graphics.Bitmap.Config для текстуры или TextureWorker.TEXTURE_STANDART (это тип конфига ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
-  //исходная текстура
-  src: {
-    //перекрашивание исходной текстуры в другой цвет (необязательно)
-    paint: {
-      //цвет, на который меняется текстура [r, g, b]
-      color: [255, 0, 255],
-      //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
-      mode: PorterDuff.Mode.SRC_IN
-    },
-    //путь к папке исходной текстуры в директории мода
-    path: "assets/items-opaque/",
-    //имя исходной текстуры без .png
-    name: "mySourceTexture_0"
-  },
   overlays: [
     {
       //перекрашивание текстуры в другой цвет (необязательно)
-      paint: {
-        //цвет, на который меняется текстура [r, g, b]
-        color: [255, 0, 255], 
-        //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
-        mode: PorterDuff.Mode.SRC_IN 
-      },
+      //цвет, на который меняется текстура [r, g, b]
+      color: [255, 0, 255],
       //путь к папке текстуры в директории мода
       path: "assets/items-opaque/",
       //имя текстуры без .png
@@ -106,10 +77,7 @@ TextureWorker.paintTexture({
     path: "assets/items-opaque/",
     name: "myTexture_0",
   },
-  paint: {
-    color: [255, 0, 255],
-    mode: PorterDuff.Mode.SRC_IN
-  },
+  color: [255, 0, 255],
   result: {
     path: "assets/items-opaque/",
     name: "myPaintedTexture_0"
@@ -134,12 +102,7 @@ TextureWorker.paintTexture({
     //имя исходной текстуры без .png
     name: "myTexture_0",
   },
-  paint: {
-    //цвет, в который перекрасить текстуру [r, g, b]
-    color: [255, 0, 255],
-    //android.graphics.PorterDuff.Mode или TextureWorker.MODE_STANDART (это SRC_IN)
-    mode: PorterDuff.Mode.SRC_IN
-  },
+  color: [255, 0, 255],
   result: {
     //путь к папке новой текстуры в директории мода
     path: "assets/items-opaque/",

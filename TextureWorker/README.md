@@ -17,20 +17,9 @@ TextureWorker.createTextureWithOverlays({
     height: 16,
     config: Bitmap.Config.ARGB_8888
   },
-  src: {
-    paint: {
-      color: [255, 0, 255],
-      mode: PorterDuff.Mode.SRC_IN
-    },
-      path: "assets/items-opaque/",
-      name: "mySourceTexture_0"
-  },
   overlays: [
     {
-      paint: {
-        color: [255, 0, 255],
-        mode: PorterDuff.Mode.SRC_IN
-      },
+      color: [255, 0, 255],
       path: "assets/items-opaque/",
       name: "myTexture_0"
     },
@@ -54,29 +43,11 @@ Creates new texture at following path with overlays.
     //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
     config: Bitmap.Config.ARGB_8888
   },
-  //source texture
-  src: {
-    //painting the source texture in another color (optional)
-    paint: {
-      //color to change texture [r, g, b]
-      color: [255, 0, 255],
-      //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
-      mode: PorterDuff.Mode.SRC_IN
-    },
-    //path to source texture folder from the mod directory
-    path: "assets/items-opaque/",
-    //texture name without .png
-    name: "mySourceTexture_0"
-  },
   overlays: [
     {
       //painting the overlay in another color (optional)
-      paint: {
-        //color to change texture [r, g, b]
-        color: [255, 0, 255], 
-        //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
-        mode: PorterDuff.Mode.SRC_IN 
-      },
+      //color to change texture [r, g, b]
+      color: [255, 0, 255],
       //path to texture's folder from the mod directory
       path: "assets/items-opaque/",
       //texture name without .png
@@ -106,10 +77,7 @@ TextureWorker.paintTexture({
     path: "assets/items-opaque/",
     name: "myTexture_0",
   },
-  paint: {
-    color: [255, 0, 255],
-    mode: PorterDuff.Mode.SRC_IN
-  },
+  color: [255, 0, 255],
   result: {
     path: "assets/items-opaque/",
     name: "myPaintedTexture_0"
@@ -134,12 +102,8 @@ Creates new texture with changed color.
     //name of the source texture without .png
     name: "myTexture_0",
   },
-  paint: {
-    //color to change texture [r, g, b]
-    color: [255, 0, 255],
-    //android.graphics.PorterDuff.Mode or TextureWorker.MODE_STANDART (it is SRC_IN)
-    mode: PorterDuff.Mode.SRC_IN
-  },
+  //color to change texture [r, g, b]
+  color: [255, 0, 255],
   result: {
     //path to new texture's folder from the mod directory
     path: "assets/items-opaque/",
