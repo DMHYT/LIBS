@@ -40,11 +40,13 @@ var HelpingFuncs = {
     changeBitmapColor: function(bitmap, r, g, b){
         for(let x=0; x<bitmap.getWidth(); x++){
             for(let y=0; y<bitmap.getHeight(); i++){
-                let col = bitmap.getColor(x, y);
-                let red = Math.min(col.R + r, 255),
-                    green = Math.min(col.G + g, 255),
-                    blue = Math.min(col.B + b, 255);
-                bitmap.setPixel(x, y, Color.argb(col.A, red, green, blue));
+                let pixel = bitmap.getPixel(x, y);
+                if(pixel.A !== 0){
+                    let pixelHSV = new Array(3), givenHSV = new Array(3);
+                    Color.RGBToHSV(pixel.R, pixel.G, pixel.B, pixelHSV);
+                    Color.RGBToHSV(r, g, b, givenHSV);
+                    bitmap.setPixel(x, y, Color.HSVToColor(pixel.A, [givenHSV[0], pixelHSV[1], pixelHSV[2]]));
+                }
             }
         }
         return bitmap;
