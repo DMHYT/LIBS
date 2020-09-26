@@ -41,9 +41,9 @@ var HelpingFuncs = {
         for(let x=0; x<bitmap.getWidth(); x++){
             for(let y=0; y<bitmap.getHeight(); i++){
                 let pixel = bitmap.getPixel(x, y);
-                if(pixel.A !== 0){
+                if(pixel.alpha() !== 0){
                     let pixelHSV = new Array(3), givenHSV = new Array(3);
-                    Color.RGBToHSV(pixel.R, pixel.G, pixel.B, pixelHSV);
+                    Color.RGBToHSV(pixel.red(), pixel.green(), pixel.blue(), pixelHSV);
                     Color.RGBToHSV(r, g, b, givenHSV);
                     bitmap.setPixel(x, y, Color.HSVToColor(pixel.A, [givenHSV[0], pixelHSV[1], pixelHSV[2]]));
                 }
