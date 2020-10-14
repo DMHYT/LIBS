@@ -1,4 +1,4 @@
-IBRARY({
+LIBRARY({
     name: "TextureWorker",
     version: 4,
     shared: false,
