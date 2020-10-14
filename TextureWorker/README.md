@@ -113,13 +113,31 @@ Creates new texture with changed color.
 }
 ```
 ***
+
+#### **Rotating the texture (V4)**
+```js
+TextureWorker.rotateTexture(
+  //android.graphics.Bitmap object of the source texture, can be returned by the FileTools.ReadImage method
+  FileTools.ReadImage(__dir__+"assets/terrain-atlas/myTexture_0.png"),
+  //rotation angle
+  90,
+  //new texture path and name without .png
+  {
+    path: "assets/terrain-atlas/",
+    name: "myRotatedTexture_0"
+  }
+);
+```
+Creates a new texture, rotated from given.
+
+***
 ### **Downloading the documentation (for Visual Studio Code hints)**
 #### - Go to your mod project folder
 #### - Move TextureWorker.d.ts to toolchain/jslibs/
 #### - Do any task that builds the mod, to update documentation
 ***
 ### **INFO**
-#### This is the first version of this library, and it has only 2 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
+#### This is the first version of this library, and it has only 3 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
 #### [My VK Public](https://www.vk.com/dmhmods)
 #### [My VK](https://www.vk.com/vstannumdum)
 ***

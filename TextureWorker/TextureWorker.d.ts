@@ -87,4 +87,14 @@ declare namespace TextureWorker {
          */
         result: TEXTURE
     }): void;
+
+    /**
+     * Creates a new texture, rotated from given
+     * @param bitmap android.graphics.Bitmap object of your texture. Can be returned from FileTools.ReadImage
+     * @param angle rotation angle
+     * @param result result texture path and name without .png
+     * @param result.path path to the result texture folder from mod directory
+     * @param result.name name of the result texture without .png
+     */
+    function rotateTexture(bitmap: android.graphics.Bitmap, angle: number, result: TEXTURE): void;
 }
