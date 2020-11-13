@@ -1,100 +1,77 @@
-interface BITMAP {
-    /**
-     * bitmap width
-     */
-    width: number,
-    /**
-     * bitmap height
-     */
-    height: number,
-    /**
-     * android.graphics.Bitmap.Config, default is ARGB_8888
-     */
-    config?: any
-}
-
-interface TEXTURE {
-    /**
-     * path to the texture from mod directory
-     * @example "assets/items-opaque/"
-     */
-    path: string,
-    /**
-     * name of the texture without .png
-     * @example "myTexture_0"
-     */
-    name: string
-}
-
-interface OVERLAY {
-    /**
-     * RGB color to paint the overlay
-     * @example [255, 0, 255]
-     */
-    color?: [r: number, g: number, b: number]
-    /**
-     * path to the texture from mod directory
-     * @example "assets/items-opaque/"
-     */
-    path: string,
-    /**
-     * name of the texture without .png
-     * @example "myTexture_0"
-     */
-    name: string
-}
+/// <reference path="core-engine.d.ts" />
+/// <reference path="android.d.ts" />
 
 declare namespace TextureWorker {
+
     /**
-     * Creates a new texture on the specified path, from other textures, with possibility of painting each overlay into specified color.
-     * @param args params object
+     * interface that represents texture's 
+     * path and name that TextureWorker will work with
      */
-    function createTextureWithOverlays(args: {
+    export interface ITextureSource {
         /**
-         * new texture bitmap settings
+         * path to the texture from mod directory
          */
-        bitmap: BITMAP | any,
+        path: string;
         /**
-         * array of the overlays, situated in the order of their overlaying above each other.
+         * name of the texture without .png
          */
-        overlays: OVERLAY[],
+        name: string;
+    }
+
+    /**
+     * interface that represents overlay texture 
+     * in method TextureWorker.createTextureWithOverlays,
+     * that has an optional property - color changing
+     */
+    export interface IOverlay extends ITextureSource {
         /**
-         * result texture
+         * RGB color to paint the overlay
          */
-        result: TEXTURE
-    }): void;
+        color?: [r: number, g: number, b: number];
+    }
+
+    /**
+     * interface that represents object for TextureWorker
+     * to create new android.graphics.Bitmap object,
+     * to create then a new texture from it
+     */
+    export interface IBitmap {
+        /**
+         * bitmap width
+         */
+        width: number;
+        /**
+         * bitmap height
+         */
+        height: number;
+        /**
+         * bitmap config, default is ARGB_8888
+         */
+        config?: android.graphics.Bitmap.Config;
+    }
+
+    /**
+     * default for most of minecraft mods texture settings,
+     * 16x16 size and ARGB_8888 config
+     */
+    export var TEXTURE_STANDART: IBitmap;
+
+    /**
+     * Creates a new texture on the specified path, 
+     * from other textures, with possibility
+     * of painting each overlay into specified color.
+     * @param args params object
+     * @param fallback whether to return final texture bitmap object after process
+     * @returns void or bitmap object if fallback is true
+     */
+    export function createTextureWithOverlays(args: {bitmap: IBitmap, overlays: IOverlay[], result: ITextureSource}, fallback?: boolean): android.graphics.Bitmap | void;
 
     /**
      * Creates a new texture from given, with changed color
      * @param args params object
+     * @param fallback whether to return final texture bitmap object after process
+     * @returns void or bitmap object if fallback is true 
      */
-    function paintTexture(args: {
-        /**
-         * new texture bitmap settings
-         */
-        bitmap: BITMAP | any,
-        /**
-         * source texture
-         */
-        src: TEXTURE,
-        /**
-         * RGB color to paint the overlay
-         * @example [255, 0, 255]
-         */
-        color: [r: number, g: number, b: number],            
-        /**
-         * result texture
-         */
-        result: TEXTURE
-    }): void;
+    export function paintTexture(args: {bitmap: IBitmap, src: ITextureSource, color: [r: number, g: number, b: number], result: ITextureSource}, fallback?: boolean): android.graphics.Bitmap | void;
 
-    /**
-     * Creates a new texture, rotated from given
-     * @param bitmap android.graphics.Bitmap object of your texture. Can be returned from FileTools.ReadImage
-     * @param angle rotation angle
-     * @param result result texture path and name without .png
-     * @param result.path path to the result texture folder from mod directory
-     * @param result.name name of the result texture without .png
-     */
-    function rotateTexture(bitmap: android.graphics.Bitmap, angle: number, result: TEXTURE): void;
 }
