@@ -1,0 +1,22 @@
+{
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "AddonLib/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "Build AddonLib"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "ItemAnimHelper/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "Build ItemAnimHelper"
+        }
+    ]
+}
