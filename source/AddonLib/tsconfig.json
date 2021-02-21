@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"lib": ["ESNext"],
+		"outFile": "../../library/AddonLib.js",
+		"allowJs": false,
+		"downlevelIteration": true,
+		"strict": false,
+		"skipLibCheck": true,
+		"declaration": true
+	},
+	"exclude": [],
+	"include": [
+		"AddonLib.ts"
+	],
+	"files": [
+		"../../declarations/core-engine.d.ts"
+	]
+}

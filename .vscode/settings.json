@@ -5,7 +5,5 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/.gitignore": true,
-        "**/.gitattributes": true
     }
 }

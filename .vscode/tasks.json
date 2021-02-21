@@ -17,6 +17,31 @@
             ],
             "group": "build",
             "label": "Build ItemAnimHelper"
-        }
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "TextureWorker/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "TextureWorker - Build Library"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "TextureWorker/tsconfig.decl.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "TextureWorker - Build Declarations"
+        },
+        {
+			"label": "Move declarations from MP docs",
+			"type": "shell",
+			"command": "main.bat",
+			"group": "build",
+			"problemMatcher": []
+		}
     ]
 }
