@@ -2,12 +2,13 @@
 	"compilerOptions": {
 		"target": "ES5",
 		"lib": ["ESNext"],
-		"outFile": "../../library/ItemAnimHelper.js",
+		"outDir": "../../library/",
 		"allowJs": false,
 		"downlevelIteration": true,
 		"strict": false,
 		"skipLibCheck": true,
-		"declaration": true
+		"declaration": true,
+		"declarationDir": "../../declarations/"
 	},
 	"exclude": [],
 	"include": [

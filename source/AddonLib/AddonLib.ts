@@ -1,3 +1,5 @@
+/// <reference path="../../declarations/core-engine.d.ts" />
+
 LIBRARY({
     name: "AddonLib",
     version: 1,

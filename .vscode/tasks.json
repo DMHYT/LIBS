@@ -1,8 +1,9 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
             "type": "typescript",
-            "tsconfig": "AddonLib/tsconfig.json",
+            "tsconfig": "source/AddonLib/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
@@ -11,7 +12,7 @@
         },
         {
             "type": "typescript",
-            "tsconfig": "ItemAnimHelper/tsconfig.json",
+            "tsconfig": "source/ItemAnimHelper/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
@@ -20,21 +21,12 @@
         },
         {
             "type": "typescript",
-            "tsconfig": "TextureWorker/tsconfig.json",
+            "tsconfig": "source/TextureWorker/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
             "group": "build",
-            "label": "TextureWorker - Build Library"
-        },
-        {
-            "type": "typescript",
-            "tsconfig": "TextureWorker/tsconfig.decl.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": "build",
-            "label": "TextureWorker - Build Declarations"
+            "label": "Build TextureWorker"
         },
         {
 			"label": "Move declarations from MP docs",

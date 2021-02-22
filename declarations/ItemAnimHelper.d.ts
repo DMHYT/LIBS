@@ -1,3 +1,4 @@
+/// <reference path="core-engine.d.ts" />
 declare namespace IAHelper {
     interface IAnimTicker {
         meta: number;
