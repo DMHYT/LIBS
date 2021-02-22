@@ -9,7 +9,7 @@
 */
 LIBRARY({
     name: "TextureWorker",
-    version: 5,
+    version: 6,
     shared: false,
     api: "CoreEngine"
 });
@@ -135,7 +135,15 @@ var TextureWorker;
     /**
      * Returns an absolute path of given path from mod directory
      */
-    TextureWorker.fromModDir = function (texturesource) { return ({ name: texturesource.name, path: __dir__ + "/" + texturesource.path }); };
+    function fromModDir(textureSource) {
+        if (textureSource.path.startsWith(__dir__))
+            return textureSource;
+        return {
+            name: textureSource.name,
+            path: __dir__ + "/" + textureSource.path
+        };
+    }
+    TextureWorker.fromModDir = fromModDir;
     /**
      * default for most of minecraft mods texture settings,
      * 16x16 size and ARGB_8888 config
@@ -243,9 +251,9 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function createTextureWithOverlaysModDir(args, fallback) {
-        args.result = TextureWorker.fromModDir(args.result);
+        args.result = fromModDir(args.result);
         for (var i in args.overlays)
-            args.overlays[i] = TextureWorker.fromModDir(args.overlays[i]);
+            args.overlays[i] = fromModDir(args.overlays[i]);
         return createTextureWithOverlays(args, fallback);
     }
     TextureWorker.createTextureWithOverlaysModDir = createTextureWithOverlaysModDir;
@@ -258,8 +266,8 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function paintTextureModDir(args, fallback) {
-        args.src = TextureWorker.fromModDir(args.result);
-        args.result = TextureWorker.fromModDir(args.result);
+        args.src = fromModDir(args.result);
+        args.result = fromModDir(args.result);
         return paintTexture(args, fallback);
     }
     TextureWorker.paintTextureModDir = paintTextureModDir;
@@ -273,8 +281,8 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function grayscaleImageModDir(src, result, fallback) {
-        src = TextureWorker.fromModDir(src);
-        result = TextureWorker.fromModDir(result);
+        src = fromModDir(src);
+        result = fromModDir(result);
         return grayscaleImage(src, result, fallback);
     }
     TextureWorker.grayscaleImageModDir = grayscaleImageModDir;

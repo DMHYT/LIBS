@@ -1,144 +1,127 @@
+[👉 Russian 👈](README.ru.md)
+
 ## **TextureWorker**
-TextureWorker is a library to work with bitmaps / textures
 ***
-### **Using TextureWorker method**
-#### **Initialization**
-To start working you must import the library.
+TextureWorker is a library that allows to create edited bitmaps / textures via code. All textures you'd set, will be being generated during mod build process.
+***
+## **Working with the library**
+***
+### **Initialization**
+To start working you must put `TextureWorker.js` file into your mod's library directory and import the library.
 ```js
 IMPORT("TextureWorker");
 ```
-***
 
-#### **Texture overlays**
+### **Remark!**
+All methods of the library have two variations that differ in path specification: the first ones take the path given by you as an absolute path, the second ones take your path as a relative path from mod directory. In code, they differ in having or not having `ModDir` postfix. For example,
 ```js
-TextureWorker.createTextureWithOverlays({
+TextureWorker.paintTexture(...);//will take path as absolute
+TextureWorker.paintTextureModDir(...);//will take path as relative
+```
+When putting textures' pathes and names, we will follow `ITextureSource` interface. If there is a case when you need to put both absolute and relative pathes into the method, you can use one helping method that the library gives.
+```js
+//according to ITextureSource interface
+let textureSource = {
+    path: "assets/items-opaque/", 
+    name: "some"
+};
+let relativeFromAbsolute = TextureWorker.fromModDir(textureSource);
+//will return ITextureSource object with an ABSOLUTE path, that you can put in methods without ModDir postfix
+```
+***
+## **Using library methods**
+***
+### **Texture overlays**
+The method `createTextureWithOverlays` will allow you to put few textures-overlays upon one texture. We will use methods with `ModDir` postfix to simplify our work.
+```js
+TextureWorker.createTextureWithOverlaysModDir({
+  //result texture's bitmap params
+  //object of type IBitmap (you can see it in TS declarations)
+  //you can use TextureWorker.TEXTURE_STANDART else, it is a standart texture, 16x16 and ARGB_8888 config
   bitmap: {
-    width: 16,
-    height: 16,
-    config: Bitmap.Config.ARGB_8888
+    width: 16,//texture width in pixels
+    height: 16,//texture height in pixels
+    //android.graphics.Bitmap.Config for the texture
+    config: android.graphics.Bitmap.Config.ARGB_8888
   },
+  //array of objects of type IOverlay
+  // (same as ITextureSource, but with additional RGB color)
   overlays: [
+    //overlays to put upon the source texture
+    //first element of the array is taken as source texture
     {
+      // R, G and B color values to paint overlay (optional)
       color: [255, 0, 255],
+      //path to the texture (from the mod directory in this case)
       path: "assets/items-opaque/",
+      //texture's name without .png
       name: "myTexture_0"
     },
     //...
   ],
   result: {
+    //path and name to the texture that'll be created
     path: "assets/items-opaque/",
     name: "myNewTexture_0"
   }
 });
 ```
-Creates new texture at following path with overlays.
-##### **Params object**
-```js
-{
-  bitmap: {
-    //texture width in pixels
-    width: 16,
-    //texture height in pixels
-    height: 16,
-    //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
-    config: Bitmap.Config.ARGB_8888
-  },
-  overlays: [
-    {
-      //painting the overlay in another color (optional)
-      //color to change texture [r, g, b]
-      color: [255, 0, 255],
-      //path to texture's folder from the mod directory
-      path: "assets/items-opaque/",
-      //texture name without .png
-      name: "myTexture_0"
-    },
-    //another objects same as above
-  ],
-  result: {
-    //path to new texture's folder from the mod directory
-    path: "assets/items-opaque/",
-    //new texture name without .png
-    name: "myNewTexture_0"
-  }
-}
-```
 ***
 
-#### **Painting the texture**
+### **Painting the texture**
+The method `createTextureWithOverlays` optionally allows to paint an overlay. But if you just need to change color of the one texture, just use method `paintTexture`.
 ```js
-TextureWorker.paintTexture({
+TextureWorker.paintTextureModDir({
+  //result texture's bitmap params
+  // (reviewed above)
   bitmap: {
     width: 16,
     height: 16,
     config: Bitmap.Config.ARGB_8888
   },
+  //source texture's path and name
   src: {
     path: "assets/items-opaque/",
     name: "myTexture_0",
   },
+  // [red, green, blue] color values
   color: [255, 0, 255],
+  //result texture's path and name
   result: {
     path: "assets/items-opaque/",
     name: "myPaintedTexture_0"
   }
 });
 ```
-Creates new texture with changed color.
-##### **Params object**
+***
+
+### **Grayscaling the texture**
+The method `grayscaleImage` will allow you to make your texture in grayscale. You will need this, for example, if you want to create many colorful textures of one gray one, using `paintTexture` method.
 ```js
-{
-  bitmap: {
-    //texture width in pixels
-    width: 16,
-    //texture height in pixels
-    height: 16,
-    //android.graphics.Bitmap.Config for the texture or TextureWorker.TEXTURE_STANDART (it's config ARGB_8888)
-    config: Bitmap.Config.ARGB_8888
-  },
-  src: {
-    //path to source texture from mod directory
-    path: "assets/items-opaque/",
-    //name of the source texture without .png
-    name: "myTexture_0",
-  },
-  //color to change texture [r, g, b]
-  color: [255, 0, 255],
-  result: {
-    //path to new texture's folder from the mod directory
-    path: "assets/items-opaque/",
-    //new texture name without .png
-    name: "myPaintedTexture_0"
-  }
-}
+TextureWorker.grayscaleImage(
+/*Source texture's path and name*/{
+  path: "assets/items-opaque/",
+  name: "myTexture_0",
+}, /*Result texture's path and name*/{
+  path: "assets/items-opaque/",
+  name: "myGrayTexture_0"
+});
 ```
 ***
 
-#### **Rotating the texture (V4)**
+## **Additionally**
+***
+All methods of the library have one additional parameter `fallback`, that will define whether the function will return `void` or result texture's `android.graphics.Bitmap` object for your further manipulations. 
 ```js
-TextureWorker.rotateTexture(
-  //android.graphics.Bitmap object of the source texture, can be returned by the FileTools.ReadImage method
-  FileTools.ReadImage(__dir__+"assets/terrain-atlas/myTexture_0.png"),
-  //rotation angle
-  90,
-  //new texture path and name without .png
-  {
-    path: "assets/terrain-atlas/",
-    name: "myRotatedTexture_0"
-  }
-);
+//returns void
+TextureWorker.paintTexture({...}, false);
+//returns bitmap object of the texture generated by the method
+let bitmap = TextureWorker.paintTexture({...}, true);
 ```
-Creates a new texture, rotated from given.
 
+## **INFO**
+### This is the first version of this library, and it has only 3 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
+### **[My VK Public](https://www.vk.com/dmhmods)**
+### **[My VK](https://www.vk.com/vstannumdum)**
 ***
-### **Downloading the documentation (for Visual Studio Code hints)**
-#### - Go to your mod project folder
-#### - Move TextureWorker.d.ts to toolchain/jslibs/
-#### - Do any task that builds the mod, to update documentation
-***
-### **INFO**
-#### This is the first version of this library, and it has only 3 methods. You can propose new useful methods for textures in VK, and also you can propose your ideas about improvement of library's convenience and customization.
-#### [My VK Public](https://www.vk.com/dmhmods)
-#### [My VK](https://www.vk.com/vstannumdum)
-***
-###### © vstannumdum 2020
+##### **© vstannumdum 2020**

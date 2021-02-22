@@ -3,7 +3,7 @@ declare namespace TextureWorker {
     /**
      * Returns an absolute path of given path from mod directory
      */
-    const fromModDir: (texturesource: ITextureSource) => ITextureSource;
+    function fromModDir(textureSource: ITextureSource): ITextureSource;
     /**
      * interface that represents texture's
      * path and name that TextureWorker will work with

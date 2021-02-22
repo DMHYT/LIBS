@@ -11,7 +11,7 @@
 
 LIBRARY({
     name: "TextureWorker",
-    version: 5,
+    version: 6,
     shared: false,
     api: "CoreEngine"
 });
@@ -128,7 +128,13 @@ namespace TextureWorker {
     /**
      * Returns an absolute path of given path from mod directory
      */
-    export const fromModDir = (texturesource: ITextureSource) => ({name: texturesource.name, path: `${__dir__}/${texturesource.path}`} as ITextureSource);
+    export function fromModDir(textureSource: ITextureSource): ITextureSource {
+        if(textureSource.path.startsWith(__dir__)) return textureSource;
+        return {
+            name: textureSource.name,
+            path: `${__dir__}/${textureSource.path}`
+        } as ITextureSource;
+    }
     
     /**
      * interface that represents texture's 
