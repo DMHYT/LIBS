@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"lib": ["ESNext"],
+		"outDir": "../../library/",
+		"allowJs": false,
+		"downlevelIteration": true,
+		"strict": false,
+		"skipLibCheck": true,
+		"declaration": true,
+		"declarationDir": "../../declarations/"
+	},
+	"exclude": [],
+	"include": [
+		"PortalUtils.ts"
+	],
+	"files": [
+		"../../declarations/core-engine.d.ts"
+	]
+}
