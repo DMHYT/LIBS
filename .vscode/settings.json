@@ -5,5 +5,14 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-    }
+        "**/.gitattributes": true,
+        "**/.gitignore": true,
+        "**/LICENSE": true,
+        "**/loaddocs.bat": true,
+        "**/loaddocs.py": true,
+        "**/core-engine.d.ts": true,
+        "**/android.d.ts": true,
+        "**/android-declarations.d.ts": true
+    },
+    "vscode.tsc.compiler.alertTSConfigChanges": "never"
 }

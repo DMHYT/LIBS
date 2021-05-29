@@ -29,9 +29,9 @@
             "label": "Build TextureWorker"
         },
         {
-			"label": "Move declarations from MP docs",
+			"label": "Download docs",
 			"type": "shell",
-			"command": "main.bat",
+			"command": "loaddocs.bat",
 			"group": "build",
 			"problemMatcher": []
 		}
