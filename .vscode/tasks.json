@@ -3,15 +3,6 @@
     "tasks": [
         {
             "type": "typescript",
-            "tsconfig": "source/AddonLib/tsconfig.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": "build",
-            "label": "Build AddonLib"
-        },
-        {
-            "type": "typescript",
             "tsconfig": "source/ItemAnimHelper/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
@@ -27,6 +18,24 @@
             ],
             "group": "build",
             "label": "Build TextureWorker"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "source/PortalUtils/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "Build PortalUtils"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "source/CompassLib/tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "Build CompassLib"
         },
         {
 			"label": "Download docs",
