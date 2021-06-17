@@ -224,17 +224,13 @@ class PortalShape {
     public setFrameIds(...ids: number[]): PortalShape {
         this.frameIds = {};
         this.buildIds.frame = ids[0];
-        for(let id of ids){
-            this.frameIds[id] = true; 
-        }
+        for(let i in ids) this.frameIds[ids[i]] = true;
         return this;
     }
 
     public setSpaceIds(...ids: number[]): PortalShape {
         this.spaceIds = {0: true};
-        for(let id of ids){
-            this.spaceIds[id] = true;
-        }
+        for(let i in ids) this.spaceIds[ids[i]] = true;
         return this;
     }
 
@@ -343,7 +339,8 @@ class PortalShape {
             });
         }
         let rects: PortalUtils.FullRect[] = [];
-        for(let raw of rawRects){
+        for(let i in rawRects){
+            let raw = rawRects[i];
             let rect: PortalUtils.FullRect = this._buildRect({x: x, y: y, z: z}, raw);
             if(rect && rect.width() - 1 >= this.minWidth && rect.height() - 2 >= this.minHeight){
                 rects.push(rect);
@@ -413,9 +410,9 @@ class PortalShape {
 
     public findPortal(x: number, y: number, z: number, region: BlockSource): PortalUtils.FullRect {
         let rects: PortalUtils.FullRect[] = this._getPossibleRects(x, y, z, region);
-        for(let rect of rects){
-            if(this._checkRect(rect, region)) return rect;
-        }
+        for(let i in rects)
+            if(this._checkRect(rects[i], region))
+                return rects[i];
     }
 
     public buildPortal(rect: PortalUtils.FullRect, region: BlockSource, isNewOne: boolean): void {
@@ -588,7 +585,7 @@ namespace DimensionHelper {
     export function eliminateIncorrectPlacedPortals(pos: Vector, portalId: number, frameIds: number[], region: BlockSource): void {
         let validIds: {[key: number]: boolean};
         validIds[portalId] = true;
-        for(let frame of frameIds) validIds[frame] = true;
+        for(let i in frameIds) validIds[frameIds[i]] = true;
         Updatable.addUpdatable(new PortalChecker(validIds, portalId, pos, region));
     }
 

@@ -1,15 +1,4 @@
 /// <reference path="../../declarations/core-engine.d.ts" />
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 /*
 ██████╗  █████╗ ██████╗ ████████╗ █████╗ ██╗       ██╗   ██╗████████╗██╗██╗      ██████╗
 ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██║       ██║   ██║╚══██╔══╝██║██║     ██╔════╝
@@ -156,48 +145,24 @@ var PortalShape = /** @class */ (function () {
         return this;
     };
     PortalShape.prototype.setFrameIds = function () {
-        var e_1, _a;
         var ids = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             ids[_i] = arguments[_i];
         }
         this.frameIds = {};
         this.buildIds.frame = ids[0];
-        try {
-            for (var ids_1 = __values(ids), ids_1_1 = ids_1.next(); !ids_1_1.done; ids_1_1 = ids_1.next()) {
-                var id = ids_1_1.value;
-                this.frameIds[id] = true;
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (ids_1_1 && !ids_1_1.done && (_a = ids_1.return)) _a.call(ids_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
+        for (var i in ids)
+            this.frameIds[ids[i]] = true;
         return this;
     };
     PortalShape.prototype.setSpaceIds = function () {
-        var e_2, _a;
         var ids = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             ids[_i] = arguments[_i];
         }
         this.spaceIds = { 0: true };
-        try {
-            for (var ids_2 = __values(ids), ids_2_1 = ids_2.next(); !ids_2_1.done; ids_2_1 = ids_2.next()) {
-                var id = ids_2_1.value;
-                this.spaceIds[id] = true;
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (ids_2_1 && !ids_2_1.done && (_a = ids_2.return)) _a.call(ids_2);
-            }
-            finally { if (e_2) throw e_2.error; }
-        }
+        for (var i in ids)
+            this.spaceIds[ids[i]] = true;
         return this;
     };
     PortalShape.prototype.setHorizontal = function (horizontal) {
@@ -269,7 +234,6 @@ var PortalShape = /** @class */ (function () {
         }
     };
     PortalShape.prototype._getPossibleRects = function (x, y, z, region) {
-        var e_3, _a;
         var distances = {
             left: this._searchForFrameTile(x, y, z, -1, 0, 0, region),
             right: this._searchForFrameTile(x, y, z, 1, 0, 0, region),
@@ -305,21 +269,12 @@ var PortalShape = /** @class */ (function () {
             });
         }
         var rects = [];
-        try {
-            for (var rawRects_1 = __values(rawRects), rawRects_1_1 = rawRects_1.next(); !rawRects_1_1.done; rawRects_1_1 = rawRects_1.next()) {
-                var raw = rawRects_1_1.value;
-                var rect = this._buildRect({ x: x, y: y, z: z }, raw);
-                if (rect && rect.width() - 1 >= this.minWidth && rect.height() - 2 >= this.minHeight) {
-                    rects.push(rect);
-                }
+        for (var i in rawRects) {
+            var raw = rawRects[i];
+            var rect = this._buildRect({ x: x, y: y, z: z }, raw);
+            if (rect && rect.width() - 1 >= this.minWidth && rect.height() - 2 >= this.minHeight) {
+                rects.push(rect);
             }
-        }
-        catch (e_3_1) { e_3 = { error: e_3_1 }; }
-        finally {
-            try {
-                if (rawRects_1_1 && !rawRects_1_1.done && (_a = rawRects_1.return)) _a.call(rawRects_1);
-            }
-            finally { if (e_3) throw e_3.error; }
         }
         return rects;
     };
@@ -382,22 +337,10 @@ var PortalShape = /** @class */ (function () {
         }
     };
     PortalShape.prototype.findPortal = function (x, y, z, region) {
-        var e_4, _a;
         var rects = this._getPossibleRects(x, y, z, region);
-        try {
-            for (var rects_1 = __values(rects), rects_1_1 = rects_1.next(); !rects_1_1.done; rects_1_1 = rects_1.next()) {
-                var rect = rects_1_1.value;
-                if (this._checkRect(rect, region))
-                    return rect;
-            }
-        }
-        catch (e_4_1) { e_4 = { error: e_4_1 }; }
-        finally {
-            try {
-                if (rects_1_1 && !rects_1_1.done && (_a = rects_1.return)) _a.call(rects_1);
-            }
-            finally { if (e_4) throw e_4.error; }
-        }
+        for (var i in rects)
+            if (this._checkRect(rects[i], region))
+                return rects[i];
     };
     PortalShape.prototype.buildPortal = function (rect, region, isNewOne) {
         if (isNewOne) {
@@ -555,22 +498,10 @@ var DimensionHelper;
     }
     DimensionHelper.adjustPlayerInPortal = adjustPlayerInPortal;
     function eliminateIncorrectPlacedPortals(pos, portalId, frameIds, region) {
-        var e_5, _a;
         var validIds;
         validIds[portalId] = true;
-        try {
-            for (var frameIds_1 = __values(frameIds), frameIds_1_1 = frameIds_1.next(); !frameIds_1_1.done; frameIds_1_1 = frameIds_1.next()) {
-                var frame = frameIds_1_1.value;
-                validIds[frame] = true;
-            }
-        }
-        catch (e_5_1) { e_5 = { error: e_5_1 }; }
-        finally {
-            try {
-                if (frameIds_1_1 && !frameIds_1_1.done && (_a = frameIds_1.return)) _a.call(frameIds_1);
-            }
-            finally { if (e_5) throw e_5.error; }
-        }
+        for (var i in frameIds)
+            validIds[frameIds[i]] = true;
         Updatable.addUpdatable(new PortalChecker(validIds, portalId, pos, region));
     }
     DimensionHelper.eliminateIncorrectPlacedPortals = eliminateIncorrectPlacedPortals;
