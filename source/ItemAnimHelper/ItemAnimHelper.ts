@@ -49,9 +49,11 @@ namespace IAHelper {
         const anim: android.graphics.Bitmap = FileTools.ReadImage(`${__dir__}/${srcPath}${srcName}.png`);
         for(let i=0; i < anim.getHeight() / anim.getWidth(); i++){
             const bmp: android.graphics.Bitmap = android.graphics.Bitmap.createBitmap(anim.getWidth(), anim.getWidth(), android.graphics.Bitmap.Config.ARGB_8888);
-            const cvs: android.graphics.Canvas = new android.graphics.Canvas(bmp);
-            const bmp2: android.graphics.Bitmap = anim.copy(anim.getConfig(), true);
-            cvs.drawBitmap(bmp2, 0, 0, null);
+            for(let x=0; x<anim.getWidth(); x++){
+                for(let y=0; y<anim.getWidth(); y++){
+                    bmp.setPixel(x, y, anim.getPixel(x, y + anim.getWidth() * i));
+                }
+            }
             FileTools.WriteImage(`${__dir__}/${resultPath}${resultName}_${i}.png`, bmp);
         }
     }
