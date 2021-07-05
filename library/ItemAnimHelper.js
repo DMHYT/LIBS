@@ -116,4 +116,4 @@ var IAHelper;
     }
     IAHelper.makeAdvancedAnim = makeAdvancedAnim;
 })(IAHelper || (IAHelper = {}));
-EXPORT("ItemAnimHelper", IAHelper);
+EXPORT("IAHelper", IAHelper);

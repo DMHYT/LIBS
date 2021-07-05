@@ -118,4 +118,4 @@ namespace IAHelper {
 
 }
 
-EXPORT("ItemAnimHelper", IAHelper);
+EXPORT("IAHelper", IAHelper);
