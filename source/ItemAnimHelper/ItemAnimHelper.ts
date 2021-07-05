@@ -64,24 +64,23 @@ namespace IAHelper {
      * @param frames how many frames has the item texture animation
      */
     export function makeCommonAnim(id: number, textureName: string, ticks: number, frames: number): void {
+        if(!!itemAnims[textureName]) return Logger.Log(`An error occured calling \'ItemAnimHelper.makeCommonAnim\' method. Another animation is already bound to item \'${Item.getName(id, 0)}\'`, "ItemAnimHelper ERROR");
+        itemAnims[textureName] = {meta: 0, timer: 0};
         let obj: IAnimTicker = itemAnims[textureName];
-        if(typeof obj === "undefined"){
-            obj = {meta: 0, timer: 0};
-            Callback.addCallback("LocalTick", () => {
-                if(obj.timer + 1 == ticks){
-                    if(obj.meta < frames) obj.meta++;
-                    else obj.meta = 0;
-                }
-                if(obj.timer < ticks) obj.timer++;
-                else obj.timer = 0;
-            });
-            Item.registerIconOverrideFunction(id, (item, isModUi) => {
-                return {
-                    name: textureName,
-                    data: IAHelper.itemAnims[textureName].meta
-                }
-            });
-        } else return Logger.Log(`An error occured calling \'ItemAnimHelper.makeCommonAnim\' method. Another animation is already bound to item \'${Item.getName(id, 0)}\'`, "ItemAnimHelper ERROR");
+        Callback.addCallback("LocalTick", () => {
+            if(obj.timer + 1 == ticks){
+                if(obj.meta < frames) obj.meta++;
+                else obj.meta = 0;
+            }
+            if(obj.timer < ticks) obj.timer++;
+            else obj.timer = 0;
+        });
+        Item.registerIconOverrideFunction(id, (item, isModUi) => {
+            return {
+                name: textureName,
+                data: IAHelper.itemAnims[textureName].meta
+            }
+        });
     }
 
     /**
@@ -93,25 +92,24 @@ namespace IAHelper {
      * @param intervals set of different intervals between which will animate the texture
      */
     export function makeAdvancedAnim(id: number, textureName: string, interval: number, frames: number[]): void {
+        if(!!itemAnims[textureName]) return Logger.Log(`An error occured calling \'IAHelper.makeAdvancedAnim\' method. Another animation is already bound to item \'${Item.getName(id, 0)}\'.`, "ItemAnimHelper ERROR");
+        itemAnims[textureName] = {meta: 0, timer: 0, frameIndex: 0};
         let obj: IAnimTicker = itemAnims[textureName];
-        if(typeof obj === "undefined"){
-            obj = {meta: 0, timer: 0, frameIndex: 0};
-            Callback.addCallback("LocalTick", () => {
-                if(obj.timer + 1 == interval){
-                    if(obj.frameIndex < frames.length) obj.frameIndex++;
-                    else obj.frameIndex = 0;
-                    obj.meta = frames[obj.frameIndex];
-                }
-                if(obj.timer < interval) obj.timer++;
-                else obj.timer = 0;
-            });
-            Item.registerIconOverrideFunction(id, (item, imu) => {
-                return {
-                    name: textureName,
-                    data: IAHelper.itemAnims[textureName].meta
-                }
-            });
-        } else return Logger.Log(`An error occured calling \'IAHelper.makeAdvancedAnim\' method. Another animation is already bound to item \'${Item.getName(id, 0)}\'.`, "ItemAnimHelper ERROR");
+        Callback.addCallback("LocalTick", () => {
+            if(obj.timer + 1 == interval){
+                if(obj.frameIndex < frames.length) obj.frameIndex++;
+                else obj.frameIndex = 0;
+                obj.meta = frames[obj.frameIndex];
+            }
+            if(obj.timer < interval) obj.timer++;
+            else obj.timer = 0;
+        });
+        Item.registerIconOverrideFunction(id, (item, imu) => {
+            return {
+                name: textureName,
+                data: IAHelper.itemAnims[textureName].meta
+            }
+        });
     }
 
 }
