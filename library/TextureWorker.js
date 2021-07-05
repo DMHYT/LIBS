@@ -266,7 +266,7 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function paintTextureModDir(args, fallback) {
-        args.src = fromModDir(args.result);
+        args.src = fromModDir(args.src);
         args.result = fromModDir(args.result);
         return paintTexture(args, fallback);
     }

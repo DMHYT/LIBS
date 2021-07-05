@@ -58,7 +58,7 @@ var IAHelper;
         var obj = IAHelper.itemAnims[textureName];
         if (typeof obj === "undefined") {
             obj = { meta: 0, timer: 0 };
-            Callback.addCallback("tick", function () {
+            Callback.addCallback("LocalTick", function () {
                 if (obj.timer + 1 == ticks) {
                     if (obj.meta < frames)
                         obj.meta++;

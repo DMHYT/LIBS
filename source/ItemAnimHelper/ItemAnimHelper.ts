@@ -71,7 +71,7 @@ namespace IAHelper {
         let obj: IAnimTicker = itemAnims[textureName];
         if(typeof obj === "undefined"){
             obj = {meta: 0, timer: 0};
-            Callback.addCallback("tick", function(){
+            Callback.addCallback("LocalTick", () => {
                 if(obj.timer + 1 == ticks){
                     if(obj.meta < frames) obj.meta++;
                     else obj.meta = 0;
@@ -79,7 +79,7 @@ namespace IAHelper {
                 if(obj.timer < ticks) obj.timer++;
                 else obj.timer = 0;
             });
-            Item.registerIconOverrideFunction(id, function(item, isModUi){
+            Item.registerIconOverrideFunction(id, (item, isModUi) => {
                 return {
                     name: textureName,
                     data: IAHelper.itemAnims[textureName].meta

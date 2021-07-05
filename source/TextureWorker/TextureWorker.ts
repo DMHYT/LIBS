@@ -294,7 +294,7 @@ namespace TextureWorker {
      * @returns void or bitmap object if fallback is true 
      */
     export function paintTextureModDir(args: {bitmap: IBitmap, src: ITextureSource, color: [r: number, g: number, b: number], result: ITextureSource}, fallback?: boolean): android.graphics.Bitmap | void {
-        args.src = fromModDir(args.result);
+        args.src = fromModDir(args.src);
         args.result = fromModDir(args.result);
         return paintTexture(args, fallback);
     }
