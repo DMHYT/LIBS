@@ -37,9 +37,7 @@ var IAHelper;
         for (var i = 0; i < anim.getHeight() / anim.getWidth(); i++) {
             var bmp = android.graphics.Bitmap.createBitmap(anim.getWidth(), anim.getWidth(), android.graphics.Bitmap.Config.ARGB_8888);
             var cvs = new android.graphics.Canvas(bmp);
-            var colors = [];
-            anim.getPixels(colors, 0, anim.getWidth(), 0, anim.getWidth() * i, anim.getWidth(), anim.getWidth());
-            var bmp2 = android.graphics.Bitmap.createBitmap(colors, anim.getWidth(), anim.getWidth(), android.graphics.Bitmap.Config.ARGB_8888);
+            var bmp2 = anim.copy(anim.getConfig(), true);
             cvs.drawBitmap(bmp2, 0, 0, null);
             FileTools.WriteImage(__dir__ + "/" + resultPath + resultName + "_" + i + ".png", bmp);
         }
