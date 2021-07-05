@@ -1,19 +1,17 @@
 /// <reference path="../../declarations/core-engine.d.ts" />
 
 /*
-
 ██╗████████╗███████╗███╗   ███╗ █████╗ ███╗  ██╗██╗███╗   ███╗██╗  ██╗███████╗██╗     ██████╗ ███████╗██████╗ 
 ██║╚══██╔══╝██╔════╝████╗ ████║██╔══██╗████╗ ██║██║████╗ ████║██║  ██║██╔════╝██║     ██╔══██╗██╔════╝██╔══██╗
 ██║   ██║   █████╗  ██╔████╔██║███████║██╔██╗██║██║██╔████╔██║███████║█████╗  ██║     ██████╔╝█████╗  ██████╔╝
 ██║   ██║   ██╔══╝  ██║╚██╔╝██║██╔══██║██║╚████║██║██║╚██╔╝██║██╔══██║██╔══╝  ██║     ██╔═══╝ ██╔══╝  ██╔══██╗
 ██║   ██║   ███████╗██║ ╚═╝ ██║██║  ██║██║ ╚███║██║██║ ╚═╝ ██║██║  ██║███████╗███████╗██║     ███████╗██║  ██║
 ╚═╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝
-
 */
 
 LIBRARY({
     name: "ItemAnimHelper",
-    version: 1,
+    version: 2,
     shared: false,
     api: 'CoreEngine'
 });
@@ -35,7 +33,7 @@ namespace IAHelper {
     export interface IAnimTicker {
         meta: number;
         timer: number;
-        interval?: number;
+        frameIndex?: number;
     }
 
     export const itemAnims: {[key: string]: IAnimTicker} = {};
@@ -62,10 +60,10 @@ namespace IAHelper {
 
     /**
      * Item texture will animate according to interval in ticks
-     * @param id - id of the item you want to animate
-     * @param textureName - name of your item's texture (you were putting it as resultName in 'convertTexture' function)
-     * @param ticks - how many ticks must pass between changing item texture animation frame
-     * @param frames - how many frames has the item texture animation
+     * @param id id of the item you want to animate
+     * @param textureName name of your item's texture (you were putting it as resultName in 'convertTexture' function)
+     * @param ticks how many ticks must pass between changing item texture animation frame
+     * @param frames how many frames has the item texture animation
      */
     export function makeCommonAnim(id: number, textureName: string, ticks: number, frames: number): void {
         let obj: IAnimTicker = itemAnims[textureName];
@@ -89,29 +87,30 @@ namespace IAHelper {
     }
 
     /**
-     * Item texture will animate according to the array of different intervals in ticks
-     * @param id - id of the item you want to animate
-     * @param textureName - name of your item's texture (you were putting it as resultName in 'convertTexture' function)
-     * @param frames - how many frames has the item texture animation
-     * @param intervals - set of different intervals between which will animate the texture
+     * Item texture will change its frames according to frame numbers array which you will specify
+     * @param id id of the item you want to animate
+     * @param textureName name of your item's texture (you were putting it as resultName in 'convertTexture' function)
+     * @param interval interval between which the texture will change its frame
+     * @param frames frames that will texture be being changed to every update interval
+     * @param intervals set of different intervals between which will animate the texture
      */
-    export function makeAdvancedAnim(id: number, textureName: string, frames: number, intervals: number[]): void {
+    export function makeAdvancedAnim(id: number, textureName: string, interval: number, frames: number[]): void {
         let obj: IAnimTicker = itemAnims[textureName];
         if(typeof obj === "undefined"){
-            obj = {meta: 0, timer: 0, interval: 0};
-            Callback.addCallback("tick", function(){
-                if(obj.interval == intervals.length) obj.interval = 0;
-                if(obj.timer >= intervals[obj.interval]){
-                    if(obj.meta < frames) obj.meta;
-                    else obj.meta = 0;
+            obj = {meta: 0, timer: 0, frameIndex: 0};
+            Callback.addCallback("LocalTick", () => {
+                if(obj.timer + 1 == interval){
+                    if(obj.frameIndex < frames.length) obj.frameIndex++;
+                    else obj.frameIndex = 0;
+                    obj.meta = frames[obj.frameIndex];
                 }
-                if(obj.timer < intervals[obj.interval]) obj.timer++;
-                else {obj.timer = 0; obj.interval++;};
+                if(obj.timer < interval) obj.timer++;
+                else obj.timer = 0;
             });
-            Item.registerIconOverrideFunction(id, function(item, isModUi){
+            Item.registerIconOverrideFunction(id, (item, imu) => {
                 return {
                     name: textureName,
-                    meta: IAHelper.itemAnims[textureName].meta
+                    data: IAHelper.itemAnims[textureName].meta
                 }
             });
         } else return Logger.Log(`An error occured calling \'IAHelper.makeAdvancedAnim\' method. Another animation is already bound to item \'${Item.getName(id, 0)}\'.`, "ItemAnimHelper ERROR");

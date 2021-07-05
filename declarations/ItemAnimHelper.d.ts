@@ -3,7 +3,7 @@ declare namespace IAHelper {
     interface IAnimTicker {
         meta: number;
         timer: number;
-        interval?: number;
+        frameIndex?: number;
     }
     const itemAnims: {
         [key: string]: IAnimTicker;
@@ -18,18 +18,19 @@ declare namespace IAHelper {
     function convertTexture(srcPath: string, srcName: string, resultPath: string, resultName: string): void;
     /**
      * Item texture will animate according to interval in ticks
-     * @param id - id of the item you want to animate
-     * @param textureName - name of your item's texture (you were putting it as resultName in 'convertTexture' function)
-     * @param ticks - how many ticks must pass between changing item texture animation frame
-     * @param frames - how many frames has the item texture animation
+     * @param id id of the item you want to animate
+     * @param textureName name of your item's texture (you were putting it as resultName in 'convertTexture' function)
+     * @param ticks how many ticks must pass between changing item texture animation frame
+     * @param frames how many frames has the item texture animation
      */
     function makeCommonAnim(id: number, textureName: string, ticks: number, frames: number): void;
     /**
-     * Item texture will animate according to the array of different intervals in ticks
-     * @param id - id of the item you want to animate
-     * @param textureName - name of your item's texture (you were putting it as resultName in 'convertTexture' function)
-     * @param frames - how many frames has the item texture animation
-     * @param intervals - set of different intervals between which will animate the texture
+     * Item texture will change its frames according to frame numbers array which you will specify
+     * @param id id of the item you want to animate
+     * @param textureName name of your item's texture (you were putting it as resultName in 'convertTexture' function)
+     * @param interval interval between which the texture will change its frame
+     * @param frames frames that will texture be being changed to every update interval
+     * @param intervals set of different intervals between which will animate the texture
      */
-    function makeAdvancedAnim(id: number, textureName: string, frames: number, intervals: number[]): void;
+    function makeAdvancedAnim(id: number, textureName: string, interval: number, frames: number[]): void;
 }
