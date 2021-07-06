@@ -71,7 +71,7 @@ namespace IAHelper {
         let obj: IAnimTicker = itemAnims[textureName];
         Callback.addCallback("LocalTick", () => {
             if(obj.timer + 1 == ticks){
-                if(obj.meta < frames) obj.meta++;
+                if(obj.meta < frames - 1) obj.meta++;
                 else obj.meta = 0;
             }
             if(obj.timer < ticks) obj.timer++;
