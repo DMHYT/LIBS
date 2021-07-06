@@ -8,8 +8,7 @@
 		"strict": false,
 		"skipLibCheck": true,
 		"declaration": true,
-		"declarationDir": "../../declarations/",
-		"removeComments": true
+		"declarationDir": "../../declarations/"
 	},
 	"exclude": [],
 	"include": [
