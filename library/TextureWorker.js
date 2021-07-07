@@ -9,7 +9,7 @@
 */
 LIBRARY({
     name: "TextureWorker",
-    version: 6,
+    version: 7,
     shared: false,
     api: "CoreEngine"
 });
@@ -18,130 +18,74 @@ LIBRARY({
 //VK Public - https://www.vk.com/dmhmods
 var TextureWorker;
 (function (TextureWorker) {
-    var HelpingFuncs;
-    (function (HelpingFuncs) {
-        function RGBToHSV(r, g, b) {
-            try {
-                r /= g /= b /= 255;
-                var cmax = Math.max(r, g, b), cmin = Math.min(r, g, b), diff = cmax - cmin, h = -1, s = -1, v = cmax * 100;
-                switch (true) {
-                    case cmax == cmin:
-                        h = 0;
-                        break;
-                    case cmax == r:
-                        h = (60 * ((g - b) / diff) + 360) % 360;
-                        break;
-                    case cmax == g:
-                        h = (60 * ((b - r) / diff) + 120) % 360;
-                        break;
-                    case cmax == b:
-                        h = (60 * ((r - g) / diff) + 240) % 360;
-                        break;
-                }
-                if (cmax == 0) {
-                    s = 0;
-                }
-                else
-                    s = (diff / cmax) * 100;
-                return [h, s, v];
-            }
-            catch (e) {
-                Logger.Log("Some errors occured during RGB to HSV conversion", "TextureWorker ERROR");
-                if (e instanceof java.lang.Throwable)
-                    Logger.LogError(e);
-            }
-        }
-        HelpingFuncs.RGBToHSV = RGBToHSV;
-        function HSVToRGB(h, s, v) {
-            try {
-                if (h > 360 || h < 0 || s > 100 || s < 0 || v > 100 || v < 0) {
-                    return Logger.Log("Error in converting HSV to RGB color", "TextureWorker ERROR");
-                }
-                s /= v /= 100;
-                var C = s * v, X = C * (1 - Math.abs(((h / 60) % 2) - 1)), m = v - C, r = void 0, g = void 0, b = void 0;
-                switch (true) {
-                    case h >= 0 && h < 60:
-                        r = C, g = X, b = 0;
-                        break;
-                    case h >= 60 && h < 120:
-                        r = X, g = C, b = 0;
-                        break;
-                    case h >= 120 && h < 180:
-                        r = 0, g = C, b = X;
-                        break;
-                    case h >= 180 && h < 240:
-                        r = 0, g = X, b = C;
-                        break;
-                    case h >= 240 && h < 300:
-                        r = X, g = 0, b = C;
-                        break;
-                    default:
-                        r = C, g = 0, b = X;
-                }
-                return [
-                    (r + m) * 255,
-                    (g + m) * 255,
-                    (b + m) * 255
-                ];
-            }
-            catch (e) {
-                Logger.Log("Some errors occured during HSV to RGB conversion", "TextureWorker ERROR");
-                if (e instanceof java.lang.Throwable)
-                    Logger.LogError(e);
+    function rgb_to_hsv(r, g, b) {
+        var h, s, v;
+        r /= 255, g /= 255, b /= 255;
+        var max = Math.max(r, g, b), min = Math.min(r, g, b), c = max - min;
+        if (c == 0)
+            h = 0;
+        else if (max == r)
+            h = ((g - b) / c) % 6;
+        else if (max == g)
+            h = (b - r) / c + 2;
+        else
+            h = (r - g) / c + 4;
+        h *= 60;
+        if (h < 0)
+            h += 360;
+        v = max;
+        if (v == 0)
+            s = 0;
+        else
+            s = c / v;
+        s *= 100, v *= 100;
+        return [h, s, v];
+    }
+    function hsv_to_rgb(h, s, v) {
+        if (h >= 360)
+            h = 359;
+        if (s > 100)
+            s = 100;
+        if (v > 100)
+            v = 100;
+        s /= 100.0, v /= 100.0;
+        var c = v * s, hh = h / 60.0, x = c * (1.0 - Math.abs((hh % 2) - 1.0)), r = 0, g = 0, b = 0;
+        if (hh >= 0 && h < 2)
+            r = c, g = x;
+        else if (hh >= 1 && hh < 2)
+            r = x, g = c;
+        else if (hh >= 2 && hh < 3)
+            g = c, b = x;
+        else if (hh >= 3 && hh < 4)
+            g = x, b = c;
+        else if (hh >= 4 && hh < 5)
+            r = x, b = c;
+        else
+            r = c, b = x;
+        var m = v - c;
+        r += m, g += m, b += m,
+            r *= 255.0, g *= 255.0, b *= 255.0,
+            r = Math.round(r), g = Math.round(g), b = Math.round(b);
+        return [r, g, b];
+    }
+    function changeBitmapColor(bitmap, color) {
+        var newbmp = android.graphics.Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);
+        for (var x = 0; x < bitmap.getWidth(); ++x) {
+            for (var y = 0; y < bitmap.getHeight(); ++y) {
+                var px = bitmap.getPixel(x, y), r = android.graphics.Color.red(px), g = android.graphics.Color.green(px), b = android.graphics.Color.blue(px);
+                var customHSV = rgb_to_hsv(color[0], color[1], color[2]), pixelHSV = rgb_to_hsv(r, g, b), finalRGB = hsv_to_rgb(customHSV[0], pixelHSV[1], pixelHSV[2]);
+                newbmp.setPixel(x, y, android.graphics.Color.argb(android.graphics.Color.alpha(px), finalRGB[0], finalRGB[1], finalRGB[2]));
             }
         }
-        HelpingFuncs.HSVToRGB = HSVToRGB;
-        function changeBitmapColor(bitmap, r, g, b) {
-            try {
-                var newBmp = android.graphics.Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-                for (var x = 0; x < bitmap.getWidth(); x++) {
-                    for (var y = 0; y < bitmap.getHeight(); y++) {
-                        var px = bitmap.getPixel(x, y), red = android.graphics.Color.red(px), green = android.graphics.Color.green(px), blue = android.graphics.Color.blue(px), alpha = android.graphics.Color.alpha(px);
-                        if (alpha !== 0) {
-                            var pixelHSV = RGBToHSV(red, green, blue), givenHSV = RGBToHSV(r, g, b), finalRGB = HSVToRGB(givenHSV[0], pixelHSV[1], pixelHSV[2]);
-                            newBmp.setPixel(x, y, android.graphics.Color.argb(alpha, finalRGB[0], finalRGB[1], finalRGB[2]));
-                        }
-                    }
-                }
-                return newBmp;
-            }
-            catch (e) {
-                Logger.Log("Some errors occured during changing bitmap color", "TextureWorker ERROR");
-                if (e instanceof java.lang.Throwable)
-                    Logger.LogError(e);
-            }
-        }
-        HelpingFuncs.changeBitmapColor = changeBitmapColor;
-        function toGrayscale(bitmap) {
-            try {
-                var grayscaled = android.graphics.Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);
-                var c = new android.graphics.Canvas(grayscaled);
-                var paint = new android.graphics.Paint();
-                var cm = new android.graphics.ColorMatrix();
-                cm.setSaturation(0);
-                var f = new android.graphics.ColorMatrixColorFilter(cm);
-                paint.setColorFilter(f);
-                c.drawBitmap(bitmap, 0, 0, paint);
-                return grayscaled;
-            }
-            catch (e) {
-                Logger.Log("Somer errors occured during grayscaling a bitmap", "TextureWorker ERROR");
-                if (e instanceof java.lang.Throwable)
-                    Logger.LogError(e);
-            }
-        }
-        HelpingFuncs.toGrayscale = toGrayscale;
-    })(HelpingFuncs || (HelpingFuncs = {}));
+        return newbmp;
+    }
     /**
      * Returns an absolute path of given path from mod directory
      */
     function fromModDir(textureSource) {
         if (textureSource.path.startsWith(__dir__))
             return textureSource;
-        return {
-            name: textureSource.name,
-            path: __dir__ + "/" + textureSource.path
-        };
+        return { name: textureSource.name, path: __dir__ + "/" + textureSource.path };
     }
     TextureWorker.fromModDir = fromModDir;
     /**
@@ -158,33 +102,23 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function createTextureWithOverlays(args, fallback) {
-        try {
-            if (FileTools.isExists(args.result.path + args.result.name + ".png")) {
-                Logger.Log("File with the path, given in method \'TextureWorker.createTextureWithOverlays\', already exists, texture generation process stopped", "TextureWorker DEBUG");
-                return;
+        var _a;
+        if (FileTools.isExists("" + args.result.path + args.result.name + ".png"))
+            return Logger.Log("File with the path, given in method \'TextureWorker.createTextureWithOverlays\', already exists, texture generation process cancelled", "TextureWorker DEBUG");
+        var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, (_a = args.bitmap.config) !== null && _a !== void 0 ? _a : android.graphics.Bitmap.Config.ARGB_8888);
+        var cvs = new android.graphics.Canvas(bmp);
+        for (var i in args.overlays) {
+            var over = args.overlays[i];
+            var tex = FileTools.ReadImage("" + over.path + over.name + ".png");
+            if (over.color) {
+                cvs.drawBitmap(changeBitmapColor(tex, over.color), 0, 0, null);
             }
-            var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, args.bitmap.config || android.graphics.Bitmap.Config.ARGB_8888);
-            var cvs = new android.graphics.Canvas(bmp);
-            for (var i in args.overlays) {
-                var over = args.overlays[i];
-                var tex = FileTools.ReadImage(over.path + over.name + ".png");
-                if (over.color !== null) {
-                    cvs.drawBitmap(HelpingFuncs.changeBitmapColor(tex, over.color[0], over.color[1], over.color[2]), 0, 0, null);
-                }
-                else
-                    cvs.drawBitmap(tex, 0, 0, null);
-            }
-            FileTools.WriteImage(args.result.path + args.result.name + ".png", bmp);
-            bmp.finalize();
-            cvs.finalize();
-            if (fallback)
-                return FileTools.ReadImage(args.result.path + args.result.name + ".png");
+            else
+                cvs.drawBitmap(tex, 0, 0, null);
         }
-        catch (e) {
-            Logger.Log("Some errors occured while calling method \'TextureWorker.createTextureWithOverlays\'", "TextureWorker ERROR");
-            if (e instanceof java.lang.Throwable)
-                Logger.LogError(e);
-        }
+        FileTools.WriteImage("" + args.result.path + args.result.name + ".png", bmp);
+        if (fallback)
+            return bmp;
     }
     TextureWorker.createTextureWithOverlays = createTextureWithOverlays;
     /**
@@ -194,27 +128,15 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function paintTexture(args, fallback) {
-        try {
-            if (FileTools.isExists(args.result.path + args.result.name + ".png")) {
-                Logger.Log("File with the path, given in method \'TextureWorker.paintTexture\', already exists, texture generation process stopped", "TextureWorker DEBUG");
-                return;
-            }
-            var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, args.bitmap.config || android.graphics.Bitmap.Config.ARGB_8888);
-            var cvs = new android.graphics.Canvas(bmp);
-            var tex = FileTools.ReadImage(args.src.path + args.src.name + ".png");
-            cvs.drawBitmap(HelpingFuncs.changeBitmapColor(tex, args.color[0], args.color[1], args.color[2]), 0, 0, null);
-            FileTools.WriteImage(args.result.path + args.result.name + ".png", bmp);
-            bmp.finalize();
-            cvs.finalize();
-            tex.finalize();
-            if (fallback)
-                return FileTools.ReadImage(args.result.path + args.result.name + ".png");
-        }
-        catch (e) {
-            Logger.Log("Some errors occured while calling method \'TextureWorker.paintTexture\'", "TextureWorker ERROR");
-            if (e instanceof java.lang.Throwable)
-                Logger.LogError(e);
-        }
+        var _a;
+        if (FileTools.isExists("" + args.result.path + args.result.name + ".png"))
+            return Logger.Log("File with the path, given in method \'TextureWorker.paintTexture\', already exists, texture generation process cancelled", "TextureWorker DEBUG");
+        var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, (_a = args.bitmap.config) !== null && _a !== void 0 ? _a : android.graphics.Bitmap.Config.ARGB_8888);
+        var cvs = new android.graphics.Canvas(bmp);
+        cvs.drawBitmap(changeBitmapColor(FileTools.ReadImage("" + args.src.path + args.src.name + ".png"), args.color), 0, 0, null);
+        FileTools.WriteImage("" + args.result.path + args.result.name + ".png", bmp);
+        if (fallback)
+            return bmp;
     }
     TextureWorker.paintTexture = paintTexture;
     /**
@@ -225,21 +147,19 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function grayscaleImage(src, result, fallback) {
-        try {
-            if (FileTools.isExists(result.path + result.name + ".png")) {
-                Logger.Log("File with the path, given in method \'TextureWorker.grayscaleImage\' already exists, texture generation process stopped", "TextureWorker DEBUG");
-                return;
-            }
-            var grayscaled = HelpingFuncs.toGrayscale(FileTools.ReadImage(src.path + src.name + ".png"));
-            FileTools.WriteImage(result.path + result.name + ".png", grayscaled);
-            if (fallback)
-                return grayscaled;
-        }
-        catch (e) {
-            Logger.Log("Some errors occured while calling method \'TextureWorker.grayscaleImage\'", "TextureWorker ERROR");
-            if (e instanceof java.lang.Throwable)
-                Logger.LogError(e);
-        }
+        if (FileTools.isExists("" + result.path + result.name + ".png"))
+            return Logger.Log("File with the path, given in method \'TextureWorker.grayscaleImage\' already exists, texture generation process cancelled", "TextureWorker DEBUG");
+        var source = FileTools.ReadImage("" + src.path + src.name + ".png");
+        var output = android.graphics.Bitmap.createBitmap(source.getWidth(), source.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);
+        var cvs = new android.graphics.Canvas(output);
+        var paint = new android.graphics.Paint();
+        var matrix = new android.graphics.ColorMatrix();
+        matrix.setSaturation(0);
+        paint.setColorFilter(new android.graphics.ColorMatrixColorFilter(matrix));
+        cvs.drawBitmap(source, 0, 0, paint);
+        FileTools.WriteImage("" + result.path + result.name + ".png", output);
+        if (fallback)
+            return output;
     }
     TextureWorker.grayscaleImage = grayscaleImage;
     /**
