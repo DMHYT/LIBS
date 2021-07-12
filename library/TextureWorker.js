@@ -18,65 +18,21 @@ LIBRARY({
 //VK Public - https://www.vk.com/dmhmods
 var TextureWorker;
 (function (TextureWorker) {
-    function rgb_to_hsv(r, g, b) {
-        var h, s, v;
-        r /= 255, g /= 255, b /= 255;
-        var max = Math.max(r, g, b), min = Math.min(r, g, b), c = max - min;
-        if (c == 0)
-            h = 0;
-        else if (max == r)
-            h = ((g - b) / c) % 6;
-        else if (max == g)
-            h = (b - r) / c + 2;
-        else
-            h = (r - g) / c + 4;
-        h *= 60;
-        if (h < 0)
-            h += 360;
-        v = max;
-        if (v == 0)
-            s = 0;
-        else
-            s = c / v;
-        s *= 100, v *= 100;
-        return [h, s, v];
-    }
-    function hsv_to_rgb(h, s, v) {
-        if (h >= 360)
-            h = 359;
-        if (s > 100)
-            s = 100;
-        if (v > 100)
-            v = 100;
-        s /= 100.0, v /= 100.0;
-        var c = v * s, hh = h / 60.0, x = c * (1.0 - Math.abs((hh % 2) - 1.0)), r = 0, g = 0, b = 0;
-        if (hh >= 0 && h < 2)
-            r = c, g = x;
-        else if (hh >= 1 && hh < 2)
-            r = x, g = c;
-        else if (hh >= 2 && hh < 3)
-            g = c, b = x;
-        else if (hh >= 3 && hh < 4)
-            g = x, b = c;
-        else if (hh >= 4 && hh < 5)
-            r = x, b = c;
-        else
-            r = c, b = x;
-        var m = v - c;
-        r += m, g += m, b += m,
-            r *= 255.0, g *= 255.0, b *= 255.0,
-            r = Math.round(r), g = Math.round(g), b = Math.round(b);
-        return [r, g, b];
-    }
+    TextureWorker.debugMode = false;
+    /**
+     * Enables or disables debug mode.
+     * With debug mode disabled, if the generated texture already exists on the given path,
+     * texture generation process will be skipped.
+     * With debug mode enabled, new texture will generate on the given path every time.
+     */
+    function toggleDebugMode(debug) { TextureWorker.debugMode = debug; }
+    TextureWorker.toggleDebugMode = toggleDebugMode;
     function changeBitmapColor(bitmap, color) {
         var newbmp = android.graphics.Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);
-        for (var x = 0; x < bitmap.getWidth(); ++x) {
-            for (var y = 0; y < bitmap.getHeight(); ++y) {
-                var px = bitmap.getPixel(x, y), r = android.graphics.Color.red(px), g = android.graphics.Color.green(px), b = android.graphics.Color.blue(px);
-                var customHSV = rgb_to_hsv(color[0], color[1], color[2]), pixelHSV = rgb_to_hsv(r, g, b), finalRGB = hsv_to_rgb(customHSV[0], pixelHSV[1], pixelHSV[2]);
-                newbmp.setPixel(x, y, android.graphics.Color.argb(android.graphics.Color.alpha(px), finalRGB[0], finalRGB[1], finalRGB[2]));
-            }
-        }
+        var canvas = new android.graphics.Canvas(newbmp);
+        var paint = new android.graphics.Paint();
+        paint.setColorFilter(new android.graphics.PorterDuffColorFilter(android.graphics.Color.rgb(color[0], color[1], color[2]), android.graphics.PorterDuff.Mode.MULTIPLY));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
         return newbmp;
     }
     /**
@@ -85,7 +41,7 @@ var TextureWorker;
     function fromModDir(textureSource) {
         if (textureSource.path.startsWith(__dir__))
             return textureSource;
-        return { name: textureSource.name, path: __dir__ + "/" + textureSource.path };
+        return { name: textureSource.name, path: __dir__ + "/" + textureSource.path, color: textureSource.color };
     }
     TextureWorker.fromModDir = fromModDir;
     /**
@@ -103,18 +59,14 @@ var TextureWorker;
      */
     function createTextureWithOverlays(args, fallback) {
         var _a;
-        if (FileTools.isExists("" + args.result.path + args.result.name + ".png"))
+        if (!TextureWorker.debugMode && FileTools.isExists("" + args.result.path + args.result.name + ".png"))
             return Logger.Log("File with the path, given in method \'TextureWorker.createTextureWithOverlays\', already exists, texture generation process cancelled", "TextureWorker DEBUG");
         var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, (_a = args.bitmap.config) !== null && _a !== void 0 ? _a : android.graphics.Bitmap.Config.ARGB_8888);
         var cvs = new android.graphics.Canvas(bmp);
         for (var i in args.overlays) {
             var over = args.overlays[i];
             var tex = FileTools.ReadImage("" + over.path + over.name + ".png");
-            if (over.color) {
-                cvs.drawBitmap(changeBitmapColor(tex, over.color), 0, 0, null);
-            }
-            else
-                cvs.drawBitmap(tex, 0, 0, null);
+            cvs.drawBitmap(over.color ? changeBitmapColor(tex, over.color) : tex, 0, 0, null);
         }
         FileTools.WriteImage("" + args.result.path + args.result.name + ".png", bmp);
         if (fallback)
@@ -129,7 +81,7 @@ var TextureWorker;
      */
     function paintTexture(args, fallback) {
         var _a;
-        if (FileTools.isExists("" + args.result.path + args.result.name + ".png"))
+        if (!TextureWorker.debugMode && FileTools.isExists("" + args.result.path + args.result.name + ".png"))
             return Logger.Log("File with the path, given in method \'TextureWorker.paintTexture\', already exists, texture generation process cancelled", "TextureWorker DEBUG");
         var bmp = android.graphics.Bitmap.createBitmap(args.bitmap.width, args.bitmap.height, (_a = args.bitmap.config) !== null && _a !== void 0 ? _a : android.graphics.Bitmap.Config.ARGB_8888);
         var cvs = new android.graphics.Canvas(bmp);
@@ -147,7 +99,7 @@ var TextureWorker;
      * @returns void or bitmap object if fallback is true
      */
     function grayscaleImage(src, result, fallback) {
-        if (FileTools.isExists("" + result.path + result.name + ".png"))
+        if (!TextureWorker.debugMode && FileTools.isExists("" + result.path + result.name + ".png"))
             return Logger.Log("File with the path, given in method \'TextureWorker.grayscaleImage\' already exists, texture generation process cancelled", "TextureWorker DEBUG");
         var source = FileTools.ReadImage("" + src.path + src.name + ".png");
         var output = android.graphics.Bitmap.createBitmap(source.getWidth(), source.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);

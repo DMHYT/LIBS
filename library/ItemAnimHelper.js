@@ -24,6 +24,15 @@ LIBRARY({
 //а также делать сами предметные анимации для Inner Core.
 var IAHelper;
 (function (IAHelper) {
+    IAHelper.debugMode = false;
+    /**
+     * Enables or disables debug mode.
+     * With debug mode disabled, if the generated texture frame already exists on the given path,
+     * the generation process will be skipped.
+     * With debug mode enabled, new texture will generate on the given path every time.
+     */
+    function toggleDebugMode(debug) { IAHelper.debugMode = debug; }
+    IAHelper.toggleDebugMode = toggleDebugMode;
     IAHelper.itemAnims = {};
     /**
      * Creates simple textures from given animated item texture from PC ('tall' texture)
@@ -33,14 +42,16 @@ var IAHelper;
      * @param resultName name of the result textures (they will be with different meta and same name)
      */
     function convertTexture(srcPath, srcName, resultPath, resultName) {
+        if (!IAHelper.debugMode && FileTools.isExists(__dir__ + "/" + resultPath + resultName + "_0.png"))
+            return Logger.Log("The texture frame on the given result path already exists, texture generation process cancelled!", "ItemAnimHelper DEBUG");
         var anim = FileTools.ReadImage(__dir__ + "/" + srcPath + srcName + ".png");
+        if (anim.getHeight() % anim.getWidth() !== 0)
+            return Logger.Log("Invalid 'tall' texture on the path '" + __dir__ + "/" + srcPath + srcName + ".png'. Texture's height must be a multiple of texture's width", "ItemAnimHelper ERROR");
         for (var i = 0; i < anim.getHeight() / anim.getWidth(); i++) {
             var bmp = android.graphics.Bitmap.createBitmap(anim.getWidth(), anim.getWidth(), android.graphics.Bitmap.Config.ARGB_8888);
-            for (var x = 0; x < anim.getWidth(); x++) {
-                for (var y = 0; y < anim.getWidth(); y++) {
+            for (var x = 0; x < anim.getWidth(); x++)
+                for (var y = 0; y < anim.getWidth(); y++)
                     bmp.setPixel(x, y, anim.getPixel(x, y + anim.getWidth() * i));
-                }
-            }
             FileTools.WriteImage(__dir__ + "/" + resultPath + resultName + "_" + i + ".png", bmp);
         }
     }

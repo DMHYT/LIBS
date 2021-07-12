@@ -1,9 +1,17 @@
 /// <reference path="core-engine.d.ts" />
 declare namespace TextureWorker {
+    var debugMode: boolean;
+    /**
+     * Enables or disables debug mode.
+     * With debug mode disabled, if the generated texture already exists on the given path,
+     * texture generation process will be skipped.
+     * With debug mode enabled, new texture will generate on the given path every time.
+     */
+    function toggleDebugMode(debug: boolean): void;
     /**
      * Returns an absolute path of given path from mod directory
      */
-    function fromModDir(textureSource: ITextureSource): ITextureSource;
+    function fromModDir(textureSource: ITextureSource | IOverlay): ITextureSource | IOverlay;
     /**
      * interface that represents texture's
      * path and name that TextureWorker will work with

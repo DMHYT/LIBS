@@ -1,5 +1,13 @@
 /// <reference path="core-engine.d.ts" />
 declare namespace IAHelper {
+    var debugMode: boolean;
+    /**
+     * Enables or disables debug mode.
+     * With debug mode disabled, if the generated texture frame already exists on the given path,
+     * the generation process will be skipped.
+     * With debug mode enabled, new texture will generate on the given path every time.
+     */
+    function toggleDebugMode(debug: boolean): void;
     interface IAnimTicker {
         meta: number;
         timer: number;
