@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"lib": ["ESNext"],
+		"outDir": "../../library/",
+		"allowJs": false,
+		"downlevelIteration": true,
+		"strict": false,
+		"skipLibCheck": true,
+		"declaration": true,
+		"declarationDir": "../../declarations/",
+		"removeComments": true
+	},
+	"exclude": [],
+	"include": [
+		"PlotLib.ts"
+	],
+	"files": [
+		"../../declarations/core-engine.d.ts"
+	]
+}
